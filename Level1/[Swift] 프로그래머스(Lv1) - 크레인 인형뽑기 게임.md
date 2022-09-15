@@ -1,4 +1,4 @@
-# [Swift] 프로그래머스(Lv1) - [크레인 인형뽑기 게임]
+# [Swift] 프로그래머스(Lv1) - 크레인 인형뽑기 게임
 
 [문제출처 프로그래머스 - 크레인 인형뽑기 게임](https://school.programmers.co.kr/learn/courses/30/lessons/64061)
 
