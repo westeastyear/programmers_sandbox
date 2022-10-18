@@ -6,9 +6,7 @@
 
 ```swift
 func isPrime(_ n: Int) -> Bool {
-    if n == 0 || n == 1 {
-        return false
-    }
+    guard n > 1 else { return false }
     
     for i in 2..<Int(sqrt(Double(n)))+1 {
         if n % i == 0 {
@@ -22,29 +20,29 @@ func solution(_ numbers: String) -> Int {
     let arr = numbers.map { String($0) }
     var result = [Int]()
     var checkList = Array(repeating: 0, count: arr.count)
-    var number = ""
-        
+    var temp = ""
+    
     func dfs(_ depth: Int, _ str: String, _ count: Int) {
         if depth == count {
-            if let number = Int(str) {
+            if let number = Int(temp) {
                 if isPrime(number) && !result.contains(number) {
                     result.append(number)
                 }
             }
         } else {
-            for i in 0..<arr.count {
-                if checkList[i] == 0 {
-                    number += arr[i]
-                    checkList[i] = 1
-                    dfs(depth+1, number, count)
-                    checkList[i] = 0
-                    number = str
+            for k in 0..<arr.count {
+                if checkList[k] == 0 {
+                    temp += arr[k]
+                    checkList[k] = 1
+                    dfs(depth+1, temp, count)
+                    checkList[k] = 0
+                    temp = str
                 }
             }
         }
     }
-    for i in 1...arr.count {
-        dfs(0, "", i)
+    for j in 1...arr.count {
+        dfs(0, "", j)
     }
     return result.count
 }
