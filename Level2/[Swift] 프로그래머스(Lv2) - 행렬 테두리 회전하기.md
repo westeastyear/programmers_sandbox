@@ -64,7 +64,64 @@ func solution(_ rows: Int, _ columns: Int, _ queries: [[Int]]) -> [Int] {
 # 다른 풀이
 
 ```swift
+func makeBoard(_ rows: Int, _ columns: Int) -> [[Int]] {
+    var board = [[Int]](repeating: [], count: rows)
+    
+    for i in 0..<board.count {
+        let start = i * columns + 1
+        board[i] = [Int](start..<start+columns)
+    }
+    return board
+}
 
+func solution(_ rows: Int, _ columns: Int, _ queries: [[Int]]) -> [Int] {
+    var board = makeBoard(rows, columns)
+    
+    func rotateAndFindMinimum(_ p1: (Int, Int), _ p2: (Int, Int)) -> Int {
+        var minimum = Int.max
+        var pos = p1
+        var before = board[pos.0][pos.1]
+        var phase = 0
+        
+        let row = [0, 1, 0, -1]
+        let column = [1, 0, -1, 0]
+        
+        while phase < 4 {
+            pos = (pos.0+row[phase], pos.1+column[phase])
+            
+            if before < minimum {
+                minimum = before
+            }
+            
+            let temp = board[pos.0][pos.1]
+            board[pos.0][pos.1] = before
+            before = temp
+            
+            let nextRow = pos.0 + row[phase]
+            let nextCol = pos.1 + column[phase]
+            if case (p1.0...p2.0) = nextRow, case (p1.1...p2.1) = nextCol {
+                continue
+            } else {
+                phase += 1
+            }
+        }
+        return minimum
+    }
+    
+    var answer = [Int]()
+    for q in queries {
+        answer.append(rotateAndFindMinimum((q[0]-1, q[1]-1), (q[2]-1, q[3]-1)))
+    }
+    return answer
+}
 ```
 
-- 제가 짠 코드는 시간이 아쉽게 느껴져서 다른 코드를 찾아보았습니다.
+- 전에 짠 코드는 시간이 아쉽게 느껴져서 다른 코드를 찾아보았습니다.
+- 하나씩 위치를 옮겨가면서 값을 옮겨주는 코드를 공부하였는데, 시간이 훨씬 더 빨리 동작하는걸 알수 있었습니다.
+- `[Int](start..<start+column)`으로도 배열을 만들수 있는게 신기방기하였습니다.
+- `Int.max`로 `Int`타입의 제일 큰값을 가져올수 있다는 걸 알게 되었습니다.(`min`도 가능)
+- 미리 `row = [0, 1, 0, -1]`, `column = [1, 0, -1, 0]`으로 값을 할당해두어 이동이 필요할시 필요한 값에 첨자접근하여 사용합니다!
+- 처음보는 문법이 있었는데 `if case`문이 아주 신박하여 기록하게 되었습니다.
+    - `(p1.0...p2.0)`의 범위에 `nextRow`가 있고, `(p1.1...p2.1)`의 범위에 `nextCol`이 있는 경우에만 `continue`합니다.
+    - 범위에 없는 경우에는 `phase`에 `+1`을 해주어 다른방향 이동시작!
+- 확실히 전에 짠 코드에는 무지성 `for`문이 가득한데, 이런식 하는 것이 더 개발자스럽고 좋아보입니다!
