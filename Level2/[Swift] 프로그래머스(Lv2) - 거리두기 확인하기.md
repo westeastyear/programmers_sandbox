@@ -56,11 +56,11 @@ func solution(_ places: [[String]]) -> [Int] {
                     if distance(coordi[i], coordi[j]) == 2 {
                         if isO(p, coordi[i], coordi[j]) {
                             answer = 0
-                                                        break
+                            break
                         }
                     } else if distance(coordi[i], coordi[j]) == 1 {
                         answer = 0
-                                                break
+                        break
                     }
                 }
             }
